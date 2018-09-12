@@ -1,0 +1,26 @@
+#!/bin/bash
+kasutaja=$1
+parool=$(pwgen 8 1)
+lahtekaust="/home/$kasutaja/" #siit hakatakse faili otsima
+for filename in $(ls $lahtekaust); do
+
+	if [ -f $filename -eq ".my.cnf"]; then
+	echo "Fail eksisteerib"
+
+	else
+	if [ -f $filename -ne ".my.sql" ]; then
+	mysql -e "CREATE DATABASE ${kasutaja};"
+	mysql -e "CREATE USER ${kasutaja}@localhost IDENTIFIED BY '$parool';"
+	mysql -e "GRANT ALL PRIVILEGES ON ${kasutaja}.* TO '${kasutaja}'@'localhost';"
+	mysql -e "FLUSH PRIVILEGES;"
+
+	touch /home/$kasutaja/.my.cnf
+	echo "[client]
+	user = $kasutaja
+	password = $parool
+	host = localhost" > /home/$kasutaja/.my.cnf
+chmod 0600 /home/$kasutaja/.my.cnf
+chown -R $kasutaja:user /home/$kasutaja/
+fi
+fi
+done
