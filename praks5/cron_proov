@@ -1,0 +1,17 @@
+#!/bin/bash
+
+kokku=`date`;
+
+kuu=`date | awk -F" " '{ print $2 } '`;
+kuupaev=`date | awk -F" " '{ print $3 }'`;
+paev=`date | awk -F" " '{ print $1 }'`;
+kellaaeg=`date | awk -F" " '{ print $4 }'`;
+riik=`date | awk -F" " '{ print $5 }'`;
+aasta=`date | awk -F" " '{ print $6 }'`;
+number=`date | awk -F" " '{ print $4 }' | awk -F: '{ print $2 }'`;
+
+echo "Tänane kuupäev on ${kuu} ${kuupaev} ${aasta}. Kell on ${kellaaeg}. See on ${riik} aeg." > /home/user/rsha/temp/proov_cron${number}.txt
+
+MAILTO= root
+00 */2 * * * /home/user/rsha/praks5/cron_proov
+00 0 * * * find /home/user/rsha/praks5/proov_cron* -mtime +1 -exec rm {} \;
