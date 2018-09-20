@@ -1,0 +1,11 @@
+#!/bin/bash
+
+MYSQL=$(dpkg-query -W -f='${status}' apache2 2>/dev/null | grep -c "ok installed")
+
+if [ $MYSQL -eq 0 ]; then
+	echo "Paigaldatakse MySQL"
+	apt-get install -y apt-get install mysql-server
+elif [ $MYSQL -eq 1 ]; then
+	echo "MySQL on juba paigaldatud."
+
+fi
